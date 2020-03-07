@@ -24,7 +24,6 @@ app.use(helmet())
 //   next();
 // });
 
-
 app.use('/api/categories', categoriesRouter);
 
 
