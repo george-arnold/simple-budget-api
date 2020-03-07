@@ -4,8 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const {NODE_ENV} = require('./config')
-const {CLIENT_ORIGIN} = require('./config');
-
+const categoriesRouter = require('./categories/categories-router')
 
 const app = express()
 
@@ -16,24 +15,19 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 
-app.use(
-    cors({
-        origin: CLIENT_ORIGIN
-    })
-);
+// app.use(function validateBearerToken(req,res,next) {
+//   const apiToken = process.env.API_Token;
+//   const authToken = req.get('Authorization');
 
-app.use(function validateBearerToken(req,res,next) {
-  const apiToken = process.env.API_Token;
-  const authToken = req.get('Authorization');
+//   if (!authToken || authToken.split(' ')[1] !== apiToken) {
+//     return res.status(401).json({ error: 'Unauthorized request' });}
+//   next();
+// });
 
-  if (!authToken || authToken.split(' ')[1] !== apiToken) {
-    return res.status(401).json({ error: 'Unauthorized request' });}
-  next();
-});
 
-app.get('/', (req,res) => {
-  res.send('Hello, world!')
-})
+app.use('/api/categories', categoriesRouter)
+
+
 
 app.use(function errorHandler(error,req,res,next) {
   let response 

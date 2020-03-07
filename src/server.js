@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const knex = require('knex');
 const { PORT, DATABASE_URL } = require('./config');
@@ -11,10 +13,6 @@ const { PORT, DATABASE_URL } = require('./config');
 
 app.set('db', db);
 
- app.get('/api/*', (req, res) => {
-   res.json({ok: true});
- });
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
- app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
- module.exports = {app};
+module.exports = {app};
