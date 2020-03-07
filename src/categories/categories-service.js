@@ -3,3 +3,5 @@ const CategoryService = {
     return knex.select('*').from('categories');
   },
 }
+console.log(CategoryService);
+module.exports = CategoryService

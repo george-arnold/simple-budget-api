@@ -16,3 +16,6 @@ categoriesRouter
   })
   .catch(next)
 });
+
+console.log('cat router',categoriesRouter)
+module.exports = categoriesRouter;
