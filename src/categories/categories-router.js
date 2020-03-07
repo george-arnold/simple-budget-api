@@ -12,7 +12,7 @@ categoriesRouter
 .get((req, res, next) => {
   CategoryService.getAllCategories(req.app.get('db'))
   .then(categories => {
-    res.json(categories.map(serializeCategory)); // What is this doing exactly?
+    res.json(categories.map(serializeCategory));
   })
   .catch(next)
 });
