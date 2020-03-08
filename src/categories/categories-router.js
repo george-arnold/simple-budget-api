@@ -19,7 +19,6 @@ categoriesRouter
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
-    console.log('BODY', req.body);
     const { name } = req.body;
     const newCategory = { name };
     //add catch if no name

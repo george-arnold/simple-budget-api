@@ -2,9 +2,9 @@ const CategoryService = {
   getAllCategories(knex) {
     return knex.select('*').from('categories');
   },
-  insertCategory(knex, newComment) {
+  insertCategory(knex, newCategory) {
     return knex
-    .insert(newComment)
+    .insert(newCategory)
     .into('categories')
     .returning('*') //what's this
     .then(rows => {
