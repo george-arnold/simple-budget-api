@@ -61,5 +61,16 @@ transactionsRouter.route('/:transactionId').all(
   })
   .catch(next);
   })
-  
+  .patch(bodyParser, (req,res,next) => {
+    const {venue, amount, comments } = req.body 
+    const transactionToUpdate = {venue, amount, comments}
+
+    TransactionService.updateTransaction(req.app.get('db'), req.params.transactionId, transactionToUpdate )
+    .then(numRowsAffected => {
+      res.status(204).json({ info: { numRowsAffected: numRowsAffected } }), end();
+    })
+    .catch(next);
+  })
+
+
 module.exports = transactionsRouter;
