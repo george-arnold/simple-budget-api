@@ -2,6 +2,26 @@ const CategoryService = {
   getAllCategories(knex) {
     return knex.select('*').from('categories');
   },
+  insertCategory(knex, newComment) {
+    return knex
+    .insert(newComment)
+    .into('categories')
+    .returning('*') //what's this
+    .then(rows => {
+      return rows[0]; // and this
+    });
+  },
+  getById(knex,categoryId){
+    return knex.from('categories').select('*').where('id', categoryId).first();
+  },
+  deleteCategory(knex,id) {
+    return knex('categories').where({id}).delete();
+  },
+  updateCategory(knex, id, newCategory) {
+    return knex('categories')
+      .where({ id })
+      .update(newCategory);
+  }
 }
 
 module.exports = CategoryService
