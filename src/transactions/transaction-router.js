@@ -10,6 +10,7 @@ const serializeTransaction = transaction => ({
   venue: transaction.venue,
   amount: transaction.amount,
   comments: transaction.comments
+  //doesn't wantto take categoryId
 });
 
 transactionsRouter
@@ -61,6 +62,7 @@ transactionsRouter.route('/:transactionId').all(
   })
   .catch(next);
   })
+
   .patch(bodyParser, (req,res,next) => {
     const {venue, amount, comments } = req.body 
     const transactionToUpdate = {venue, amount, comments}
