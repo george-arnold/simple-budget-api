@@ -48,7 +48,6 @@ categoriesRouter
   })
   .delete((req, res, next) => {
     const { categoryId } = req.params;
-    console.log(categoryId);
     CategoryService.deleteCategory(req.app.get('db'), categoryId)
       .then(numRowsAffected => {
         res.status(204).end();

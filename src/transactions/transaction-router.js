@@ -10,7 +10,7 @@ const serializeTransaction = transaction => ({
   venue: transaction.venue,
   amount: transaction.amount,
   comments: transaction.comments,
-  categoryid: transaction.categoryId
+  categoryId: transaction.category_id
 });
 
 transactionsRouter
@@ -23,8 +23,9 @@ transactionsRouter
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
-    const { venue, amount, comments, categoryid } = req.body;
-    const newTransaction = { venue, amount, comments, categoryid };
+    const { venue, amount, comments, category_id } = req.body;
+    const newTransaction = { venue, amount, comments, category_id };
+
     //add catch if no venue
     TransactionService.insertTransaction(req.app.get('db'), newTransaction)
       .then(transaction => {

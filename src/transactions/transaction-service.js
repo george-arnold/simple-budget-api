@@ -6,9 +6,9 @@ const TransactionService = {
     return knex
     .insert(newTransaction)
     .into('transactions')
-    .returning('*') //what's this
+    .returning('*') 
     .then(rows => {
-      return rows[0]; // and this
+      return rows[0]; 
     });
   },
   getTransactionById(knex,transactionId){
