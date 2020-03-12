@@ -39,7 +39,7 @@ describe('Categories endpoints', function() {
         .get('/api/categories/100')
         .expect(200);
     });
-  //need help here
+    
     it('responds 204 with delete reqest', () => {
       return supertest(app)
         .delete('api/categories/100')
