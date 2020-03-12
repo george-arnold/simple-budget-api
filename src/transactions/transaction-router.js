@@ -10,7 +10,7 @@ const serializeTransaction = transaction => ({
   venue: transaction.venue,
   amount: transaction.amount,
   comments: transaction.comments,
-  categoryId: transaction.categoryid
+  categoryid: transaction.categoryId
 });
 
 transactionsRouter
