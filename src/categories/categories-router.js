@@ -3,7 +3,6 @@ const categoriesRouter = express.Router();
 const CategoryService = require('./categories-service');
 const bodyParser = express.json();
 
-//what does this do?
 const serializeCategory = category => ({
   id: category.id,
   name: category.name
