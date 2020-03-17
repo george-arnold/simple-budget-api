@@ -29,7 +29,9 @@ signinRouter.route('/signin').post(bodyParser, (req, res) => {
 });
 signinRouter.route('/register').post(bodyParser, (req, res) => {
   const { email, name, password } = req.body;
+  console.log('password input by new user',password)
   const hash = bcrypt.hashSync(password);
+  console.log( 'new user hash', hash);
   req.app.get('db').transaction(trx => {
     trx
       .insert({

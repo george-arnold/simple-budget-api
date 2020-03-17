@@ -3,6 +3,7 @@ const transactionsRouter = express.Router();
 const TransactionService = require('./transaction-service');
 const bodyParser = express.json();
 const path = require('path');
+const { requireAuth } = require('../basic-auth')
 
 //what does this do?
 const serializeTransaction = transaction => ({
@@ -15,6 +16,7 @@ const serializeTransaction = transaction => ({
 
 transactionsRouter
   .route('/')
+  .all(requireAuth)
   .get((req, res, next) => {
     TransactionService.getAllTransactions(req.app.get('db'))
       .then(transactions => {
@@ -37,7 +39,9 @@ transactionsRouter
       .catch(next);
   });
 
-transactionsRouter.route('/:transactionId').all(
+transactionsRouter.route('/:transactionId')
+.all(requireAuth)
+.all(
   (req,
   res,
   next) => {

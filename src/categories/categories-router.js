@@ -2,6 +2,7 @@ const express = require('express');
 const categoriesRouter = express.Router();
 const CategoryService = require('./categories-service');
 const bodyParser = express.json();
+const { requireAuth } = require('../basic-auth')
 
 const serializeCategory = category => ({
   id: category.id,
@@ -10,6 +11,7 @@ const serializeCategory = category => ({
 
 categoriesRouter
   .route('/')
+  .all(requireAuth)
   .get((req, res, next) => {
     CategoryService.getAllCategories(req.app.get('db'))
       .then(categories => {
@@ -33,6 +35,7 @@ categoriesRouter
 
 categoriesRouter
   .route('/:categoryId')
+  .all(requireAuth)
   .all((req, res, next) => {
     const { categoryId } = req.params;
     CategoryService.getById(req.app.get('db'), categoryId)
