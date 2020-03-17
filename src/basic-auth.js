@@ -13,8 +13,8 @@ function requireAuth(req, res, next) {
   const [tokenEmail, tokenPassword] = Buffer.from(basicToken, 'base64')
     .toString()
     .split(':');
-  console.log('tokenEmail', tokenEmail);
-  console.log('token PW', tokenPassword);
+  // console.log('tokenEmail', tokenEmail);
+  // console.log('token PW', tokenPassword);
   if (!tokenEmail || !tokenPassword) {
     return res.status(401).json({ error: 'Unauthorized request' });
   }
@@ -26,21 +26,16 @@ function requireAuth(req, res, next) {
     .get('db')('login')
     .where({ email: tokenEmail })
     .first()
-    .then(userLog => {
+    .then(user => {
       // console.log('userpw', user.hash);
-      if (!userLog) {
+      if (!user) {
         return res.status(401).json({ error: 'No user' });
       }
-       return bcrypt.compare(tokenPassword, userLog.hash,function(err,result) {
+       return bcrypt.compare(tokenPassword, user.hash,function(err,result) {
         if(err){throw (err); }
         else {  
-          console.log(req);
-          // req.app.get('db')('users')
-          // .where({email: userLog.email})
-          // .first()
-          // .then(user => {
-    // return user specific data?
-          // } )
+          console.log('result', result)
+          console.log('result.user',result.user);
           next(); 
         }
       })
