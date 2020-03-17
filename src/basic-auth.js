@@ -32,18 +32,18 @@ function requireAuth(req, res, next) {
         return res.status(401).json({ error: 'No user' });
       }
       console.log('hashed token pw', hash, 'hashed user input @ register', user.hash);
-      // This just caused a 500 error 
-      //return bcrypt.compare(tokenPassword, user.hash).then(passwordsMatch => {
-      //   if (!passwordsMatch) {
-      //     return res.status(401).json({ error: 'Unauthorized request' });
-      //   }
-        //  this did not work as user.hash was never equal to hash for some unknown reason
-        if (user.hash !== hash) {
-          return res.status(401).json({ error: 'wrong PW' });
+      return bcrypt.compare(tokenPassword, user.hash).then(passwordsMatch => {
+        if (!passwordsMatch) {
+          return res.status(401).json({ error: 'Unauthorized request' });
         }
+        // //  this did not work as user.hash was never equal to hash for some unknown reason
+        // if (user.hash !== hash) {
+        //   return res.status(401).json({ error: 'wrong PW' });
+        // }
 
         req.user = user;
         next();
+      });
     })
     .catch(next);
 }
