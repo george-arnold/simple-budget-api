@@ -34,12 +34,13 @@ function requireAuth(req, res, next) {
        return bcrypt.compare(tokenPassword, userLog.hash,function(err,result) {
         if(err){throw (err); }
         else {  
-          req.app.get('db')('users')
-          .where({email: userLog.email})
-          .first()
-          .then(user => {
+          console.log(req);
+          // req.app.get('db')('users')
+          // .where({email: userLog.email})
+          // .first()
+          // .then(user => {
     // return user specific data?
-          } )
+          // } )
           next(); 
         }
       })
