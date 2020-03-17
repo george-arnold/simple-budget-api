@@ -21,24 +21,35 @@ function requireAuth(req, res, next) {
 
   //  attempted to hash tokenPassword
   const hash = bcrypt.hashSync(tokenPassword);
-
+  function getUserWithUserName(db, email) {
+    return db('users')
+      .where({ email })
+      .first()
+  }
+  
+  getUserWithUserName(req.app.get('db'), tokenEmail)
   req.app
     .get('db')('login')
     .where({ email: tokenEmail })
     .first()
-    .then(user => {
+    .then(userLog => {
       // console.log('userpw', user.hash);
-      if (!user) {
+      if (!userLog) {
         return res.status(401).json({ error: 'No user' });
       }
-       return bcrypt.compare(tokenPassword, user.hash,function(err,result) {
-        if(err){throw (err); }
-        else {  
-          console.log('result', result)
-          console.log('result.user',result.user);
-          next(); 
+      let compare = bcrypt.compare(tokenPassword, userLog.hash, function(err, result) {
+        if (err) {
+          throw err;
         }
+        return result;
       })
+      if (compare) {
+        req.app
+          .get('db')('users')
+          .where({email: userLog.email})
+          .first();
+      }
+      next();
     })
     .catch(next);
 }
