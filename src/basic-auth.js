@@ -31,19 +31,13 @@ function requireAuth(req, res, next) {
       if (!user) {
         return res.status(401).json({ error: 'No user' });
       }
-      console.log('hashed token pw', hash, 'hashed user input @ register', user.hash);
-      return bcrypt.compare(tokenPassword, user.hash).then(passwordsMatch => {
-        if (!passwordsMatch) {
-          return res.status(401).json({ error: 'Unauthorized request' });
+       return bcrypt.compare(tokenPassword, user.hash,function(err,result) {
+        if(err){throw (err); }
+        else {  
+          req.user = user;
+          next(); 
         }
-        // //  this did not work as user.hash was never equal to hash for some unknown reason
-        // if (user.hash !== hash) {
-        //   return res.status(401).json({ error: 'wrong PW' });
-        // }
-
-        req.user = user;
-        next();
-      });
+      })
     })
     .catch(next);
 }
