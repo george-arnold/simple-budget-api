@@ -36,12 +36,8 @@ function requireAuth(req, res, next) {
           console.log('err',err)
           throw err;
         }
-        console.log('result',result)
-        return result;
-      });
-
-      console.log('compare',compare);
-      if (compare) {
+        console.log('result', result)       
+      
         req.app
           .get('db')('users')
           .where({ email: userLog.email })
@@ -49,7 +45,7 @@ function requireAuth(req, res, next) {
           .then(user => {
             console.log('user', user);
           });
-      }
+     })
       next();
     })
     .catch(next);
