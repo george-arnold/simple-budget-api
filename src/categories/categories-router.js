@@ -6,14 +6,16 @@ const { requireAuth } = require('../basic-auth')
 
 const serializeCategory = category => ({
   id: category.id,
-  name: category.name
+  name: category.name,
+  user: category.user_id
 });
 
 categoriesRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    CategoryService.getAllCategories(req.app.get('db'))
+    console.log('this is req',req.user.id);
+    CategoryService.getAllCategories(req.app.get('db'), req.user.id)
       .then(categories => {
         res.json(categories.map(serializeCategory));
       })
@@ -22,7 +24,7 @@ categoriesRouter
   .post(bodyParser, (req, res, next) => {
     const { name } = req.body;
     const newCategory = { name };
-    //add catch if no name
+    newCategory.user_id = req.user.id
     CategoryService.insertCategory(req.app.get('db'), newCategory)
       .then(category => {
         res
