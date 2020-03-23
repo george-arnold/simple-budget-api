@@ -22,10 +22,10 @@ signinRouter.route('/signin').post(bodyParser, (req, res) => {
           })
           .catch(err => res.status(400).json('unable to get user'));
       } else {
-        res.status(400).json('first wrong credentials');
+        res.status(400).json({ password: 'Password is incorrect' });
       }
     })
-    .catch(err => res.status(400).json('second wrong credentials'));
+    .catch(err => res.status(400).json({ email: 'Email not found' }));
 });
 signinRouter.route('/register').post(bodyParser, (req, res) => {
   const { email, name, password } = req.body;
