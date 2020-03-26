@@ -2,7 +2,7 @@ const express = require('express');
 const categoriesRouter = express.Router();
 const CategoryService = require('./categories-service');
 const bodyParser = express.json();
-const { requireAuth } = require('../basic-auth')
+const { requireAuth } = require('../basic-auth');
 
 const serializeCategory = category => ({
   id: category.id,
@@ -14,7 +14,7 @@ categoriesRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    console.log('this is req',req.user.id);
+    console.log('this is req', req.user.id);
     CategoryService.getAllCategories(req.app.get('db'), req.user.id)
       .then(categories => {
         res.json(categories.map(serializeCategory));
@@ -24,7 +24,7 @@ categoriesRouter
   .post(bodyParser, (req, res, next) => {
     const { name } = req.body;
     const newCategory = { name };
-    newCategory.user_id = req.user.id
+    newCategory.user_id = req.user.id;
     CategoryService.insertCategory(req.app.get('db'), newCategory)
       .then(category => {
         res
@@ -52,9 +52,9 @@ categoriesRouter
   })
   .delete((req, res, next) => {
     const { categoryId } = req.params;
-    CategoryService.deleteCategory(req.app.get('db'), categoryId)
+    CategoryService.deleteCategory(req.app.get('db'), req.params.categoryId)
       .then(numRowsAffected => {
-        res.status(204).end();
+        res.status(202).json({ info: { numRowsAffected: numRowsAffected } }), end();
       })
       .catch(next);
   })
@@ -62,10 +62,10 @@ categoriesRouter
     const { name } = req.body;
     const categoryToUpdate = { name };
     CategoryService.updateCategory(req.app.get('db'), req.params.categoryId, categoryToUpdate)
-    .then(numRowsAffected => {
-      res.status(202).end();
-    })
-    .catch(next);
+      .then(numRowsAffected => {
+        res.status(202).end();
+      })
+      .catch(next);
   });
 
 module.exports = categoriesRouter;
