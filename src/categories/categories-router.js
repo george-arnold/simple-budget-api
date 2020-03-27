@@ -24,6 +24,11 @@ categoriesRouter
   .post(bodyParser, (req, res, next) => {
     const { name } = req.body;
     const newCategory = { name };
+    for (const [key, value] of Object.entries(newCategory))
+      if (value == null)
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        });
     newCategory.user_id = req.user.id;
     CategoryService.insertCategory(req.app.get('db'), newCategory)
       .then(category => {

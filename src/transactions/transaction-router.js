@@ -3,7 +3,7 @@ const transactionsRouter = express.Router();
 const TransactionService = require('./transaction-service');
 const bodyParser = express.json();
 const path = require('path');
-const { requireAuth } = require('../basic-auth')
+const { requireAuth } = require('../basic-auth');
 
 //what does this do?
 const serializeTransaction = transaction => ({
@@ -25,10 +25,15 @@ transactionsRouter
       .catch(next);
   })
   .post(bodyParser, (req, res, next) => {
-    const { venue, amount, comments, category_id } = req.body;
-    const newTransaction = { venue, amount, comments, category_id };
+    const { venue, amount, category_id } = req.body;
+    const newTransaction = { venue, amount, category_id };
 
-    //add catch if no venue
+    for (const [key, value] of Object.entries(newTransaction))
+      if (value == null)
+        return res.status(400).json({
+          error: `Missing '${key}' in request body`
+        });
+
     TransactionService.insertTransaction(req.app.get('db'), newTransaction)
       .then(transaction => {
         res
@@ -39,12 +44,10 @@ transactionsRouter
       .catch(next);
   });
 
-transactionsRouter.route('/:transactionId')
-.all(requireAuth)
-.all(
-  (req,
-  res,
-  next) => {
+transactionsRouter
+  .route('/:transactionId')
+  .all(requireAuth)
+  .all((req, res, next) => {
     TransactionService.getTransactionById(req.app.get('db'), req.params.transactionId)
       .then(transaction => {
         if (!transaction) {
@@ -57,27 +60,26 @@ transactionsRouter.route('/:transactionId')
       })
       .catch(next);
   })
-  .get((req,res, next) =>{
+  .get((req, res, next) => {
     res.json(serializeTransaction(res.transaction));
   })
   .delete((req, res, next) => {
     TransactionService.deleteTransaction(req.app.get('db'), req.params.transactionId)
-    .then(numRowsAffected => {
-      res.status(202).json({ info: { numRowsAffected: numRowsAffected } }), end()
-  })
-  .catch(next);
-  })
-
-  .patch(bodyParser, (req,res,next) => {
-    const {venue, amount, comments } = req.body 
-    const transactionToUpdate = {venue, amount, comments}
-
-    TransactionService.updateTransaction(req.app.get('db'), req.params.transactionId, transactionToUpdate )
-    .then(numRowsAffected => {
-      res.status(204).json({ info: { numRowsAffected: numRowsAffected } }), end();
-    })
-    .catch(next);
+      .then(numRowsAffected => {
+        res.status(202).json({ info: { numRowsAffected: numRowsAffected } }), end();
+      })
+      .catch(next);
   })
 
+  .patch(bodyParser, (req, res, next) => {
+    const { venue, amount, comments } = req.body;
+    const transactionToUpdate = { venue, amount, comments };
+
+    TransactionService.updateTransaction(req.app.get('db'), req.params.transactionId, transactionToUpdate)
+      .then(numRowsAffected => {
+        res.status(204).json({ info: { numRowsAffected: numRowsAffected } }), end();
+      })
+      .catch(next);
+  });
 
 module.exports = transactionsRouter;
