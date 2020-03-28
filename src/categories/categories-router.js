@@ -14,7 +14,6 @@ categoriesRouter
   .route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    console.log('this is req', req.user.id);
     CategoryService.getAllCategories(req.app.get('db'), req.user.id)
       .then(categories => {
         res.json(categories.map(serializeCategory));
