@@ -1,5 +1,36 @@
 # Simple-Budget Api
 
+## Name of App
+
+Simple Budget
+
+## Project-Live
+
+https://simple-budget.georgearnold88.now.sh/
+
+- Make sure to click "Use Demo Account"
+
+## Screenshots
+
+![Sign in Screen](./assets/pic1.png?raw=true 'sign in screen')
+![Category and Transaction Entry](./assets/pic2.png?raw=true 'Category and Transaction Entry')
+![Category Draft](./assets/pic3.png?raw=true 'Category Draft')
+
+## App Summary
+
+This app's primary function is to track expenses. The main purpose of making budget is to control your spending, so this simplifies the normal budget app by omitting incoming money.
+
+- Sign in (A demo account is set up, but any data added to the demo account will not carry between sign-ins.)
+- Add Categories
+- Add Transactions, making sure to select one of the categories that you already created
+- See the results!
+- The "Spending Tracker" will show you a visual display of where your money is going!
+
+## Technology
+
+- Main technologies are React and CSS.
+- Other technologies used: Jest- Testing, React-minimal-pie-chart, fortawesome for icons
+
 ## API Endpoints
 
 ### /categories:
